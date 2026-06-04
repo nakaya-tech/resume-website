@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>雪里 - 个人简介</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <!-- Three.js 本地加载（最稳定） -->
+    <script src="./lib/three128.min.js"></script>
+    <script src="./lib/GLTFLoader.js"></script>
+    <script src="main.js?v=1.2"></script>
+</head>
+<body class="theme-day">
+    <div class="splash">
+        <div class="splash__bg"></div>
+        
+        <!-- 顶部状态栏 -->
+        <header class="top-bar">
+            <div class="top-bar__container">
+                <!-- 左侧：Logo和标题 -->
+                <div class="top-bar__left">
+                    <div class="top-bar__logo">
+                        <span class="top-bar__logo-dot"></span>
+                        <span class="top-bar__title">MY SPACE</span>
+                    </div>
+                </div>
+                
+                <!-- 中间：导航菜单 -->
+                <nav class="top-bar__nav">
+                    <a href="#ai-chat" class="top-bar__nav-item" data-section="ai-chat">AI助手</a>
+                </nav>
+                
+                <!-- 右侧：功能按钮和用户信息 -->
+                <div class="top-bar__right top-bar__right--left">
+                    <div class="top-bar__time" id="top-bar-time"></div>
+                    <button id="theme-toggle" class="top-bar__theme-btn" onclick="toggleTheme()">
+                        <span id="theme-icon">☀️</span>
+                    </button>
+                    <button id="personal-space-btn" class="top-bar__personal-btn" onclick="openPersonalSpace()">
+                        <img src="images/avatar.jpg" alt="头像" class="personal-avatar" />
+                        <span>我的</span>
+                    </button>
+                </div>
+                <div class="back-to-top-wrapper">
+                    <button id="back-to-top-btn" class="back-to-top-btn" onclick="scrollToTop()">
+                        <span class="back-to-top-icon">⇪</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="space">
+            <aside class="space__sidebar">
+                <!-- 飘动浮云背景效果（白天模式） -->
+                <div class="sidebar__clouds">
+                    <div class="cloud cloud-1"></div>
+                    <div class="cloud cloud-2"></div>
+                    <div class="cloud cloud-3"></div>
+                    <div class="cloud cloud-4"></div>
+                    <div class="cloud cloud-5"></div>
+                </div>
+                
+                <!-- 闪烁星星效果（夜间模式） -->
+                <div class="sidebar__stars">
+                    <div class="star star-1"></div>
+                    <div class="star star-2"></div>
+                    <div class="star star-3"></div>
+                    <div class="star star-4"></div>
+                    <div class="star star-5"></div>
+                    <div class="star star-6"></div>
+                    <div class="star star-7"></div>
+                    <div class="star star-8"></div>
+                    <div class="star star-9"></div>
+                    <div class="star star-10"></div>
+                    <div class="star star-11"></div>
+                    <div class="star star-12"></div>
+                    <div class="star star-13"></div>
+                </div>
+                
+                <!-- 流星动画效果（夜间模式） -->
+                <div class="sidebar__meteors">
+                    <div class="meteor meteor-1"></div>
+                    <div class="meteor meteor-2"></div>
+                    <div class="meteor meteor-3"></div>
+                    <div class="meteor meteor-4"></div>
+                    <div class="meteor meteor-5"></div>
+                    <div class="meteor meteor-6"></div>
+                    <div class="meteor meteor-7"></div>
+                    <div class="meteor meteor-8"></div>
+                    <div class="meteor meteor-9"></div>
+                    <div class="meteor meteor-10"></div>
+                </div>
+                
+                <div class="sidebar__profile">
+                    <div class="sidebar__avatar">
+                        <div class="sidebar__avatar-inner" style="background-image: url('images/avatar_sidebar.jpg'); background-size: cover; background-position: center; color: transparent;">武</div>
+                    </div>
+                    <h2 class="sidebar__name">武靖皓</h2>
+                    <p class="sidebar__contact" id="contactBtn">📧 联系方式</p>
+                </div>
+
+                <nav class="sidebar__nav">
+                    <a href="#profile" class="nav__item" data-section="profile">
+                        <span class="nav__text">个人简介</span>
+                    </a>
+                    <a href="#education" class="nav__item" data-section="education">
+                        <span class="nav__text">教育背景</span>
+                    </a>
+                    <a href="#experience" class="nav__item" data-section="experience">
+                        <span class="nav__text">实习经历</span>
+                    </a>
+                    <a href="#club" class="nav__item" data-section="club">
+                        <span class="nav__text">社团经历</span>
+                    </a>
+                    <a href="#competition" class="nav__item" data-section="competition">
+                        <span class="nav__text">竞赛经历</span>
+                    </a>
+                    <a href="#skills" class="nav__item" data-section="skills">
+                        <span class="nav__text">专业技能</span>
+                    </a>
+                    <a href="#evaluation" class="nav__item" data-section="evaluation">
+                        <span class="nav__text">自我评价</span>
+                    </a>
+                    <a href="#projects" class="nav__item" data-section="projects">
+                        <span class="nav__text">项目经历</span>
+                    </a>
+                </nav>
+
+                <div class="sidebar__back">
+                    <a href="index.html" class="back-link">
+                        <span>←</span>
+                        <span>返回首页</span>
+                    </a>
+                </div>
+            </aside>
+
+            <main class="space__content">
+                <div class="profile-ai-row">
+                    <section id="profile" class="content__section profile-section">
+                        <div class="card">
+                            <div class="profile-header">
+                                <div class="profile-avatar-wrapper">
+                                    <img src="images/avatar.jpg" alt="头像" class="profile-avatar">
+                                </div>
+                                <div class="profile-greeting">
+                                    <h3 class="profile-name">你好，我是雪里</h3>
+                                    <p class="profile-bio">一名热爱vibe coding的大三学生，在AI的道路上不断探索！探索！探索！</p>
+                                    <div class="profile-tags">
+                                        <span class="tag">AIGC</span>
+                                        <span class="tag">ENFJ</span>
+                                        <span class="tag">ISTJ</span>
+                                        <span class="tag">水瓶座</span>
+                                        <span class="tag">宽肩窄腰</span>
+                                        <span class="tag">薄肌</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="profile-info">
+                                <div class="profile-item">
+                                    <span class="profile-label">出生年月</span>
+                                    <span class="profile-value">2005年2月</span>
+                                </div>
+                                <div class="profile-item">
+                                    <span class="profile-label">所在城市</span>
+                                    <span class="profile-value">南昌，中国</span>
+                                </div>
+                                <div class="profile-item">
+                                    <span class="profile-label">求职意向</span>
+                                    <span class="profile-value">产品经理、产品策划、产品运营</span>
+                                </div>
+                                <div class="profile-item">
+                                    <span class="profile-label">意向城市</span>
+                                    <span class="profile-value">上海 成都 杭州</span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <section id="ai-chat" class="content__section ai-section">
+                        <div class="card ai-chat-container">
+                            <div class="ai-3d-container" id="ai3DContainer">
+                                <canvas id="ai3DCanvas"></canvas>
+                                <button class="ai-3d-click-btn" onclick="openChatDialog()">点击我开始聊天</button>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                
+                <section id="education" class="content__section">
+                    <div class="section__header">
+                        <h2 class="section__title">教育背景</h2>
+                    </div>
+                    <div class="card">
+                        <div class="card__header">
+                            <h3 class="card__title">南昌大学</h3>
+                            <span class="card__date">2023.9 - 至今</span>
+                        </div>
+                        <p class="card__subtitle">工业工程 · 211院校</p>
+                        <p class="card__content">学科评估：2024年工业工程学科评估B+</p>
+                        <p class="card__content" style="margin-top: 10px;">主修课程：基础工业工程、经济学、统计学、可靠性工程、系统工程、商业数据分析等</p>
+                    </div>
+                </section>
+
+                <section id="experience" class="content__section">
+                    <div class="section__header">
+                        <h2 class="section__title">实习经历</h2>
+                    </div>
+                    <div class="card">
+                        <div class="card__header">
+                            <h3 class="card__title">江西联通</h3>
+                            <span class="card__date">2024.6 - 2024.9</span>
+                        </div>
+                        <p class="card__subtitle">新媒体运营</p>
+                        <ul class="card__list">
+                            <li>负责公司新媒体账号的整体运营工作，重点管理抖音及小红书平台的校园宣传账号</li>
+                            <li>针对高考应届生目标群体，制定精准的内容传播与品牌推广策略</li>
+                            <li>结合择校热点话题与用户偏好，独立规划内容方向并执行完整内容生产流程，包括脚本撰写、素材制作、排版设计、发布管理及评论运维</li>
+                            <li>持续输出高质量干货内容，涵盖校园实景展示、专业解析、报考答疑等核心板块</li>
+                            <li>通过系统性内容优化与发布节奏把控，显著提升账号传播效果</li>
+                            <li>运营期间实现账号粉丝净增长300+，成功打造单篇阅读量达150万的抖音爆款内容</li>
+                            <li>有效提升学校在考生群体中的品牌知名度与市场影响力</li>
+                        </ul>
+                    </div>
+                    <div class="card" style="margin-top: 20px;">
+                        <div class="card__header">
+                            <h3 class="card__title">哈啰出行</h3>
+                            <span class="card__date">2025.9 - 2025.12</span>
+                        </div>
+                        <p class="card__subtitle">产品运营实习生 · 参与光合青年有爱相机项目</p>
+                        <ul class="card__list">
+                            <li>独立负责App客户端增长全流程运营工作，全面整合AI影像技术资源，制定并执行差异化运营策略，有效提升核心功能的用户渗透率与活跃度指标</li>
+                            <li>围绕AI人像、AI特效、智能成片等核心功能构建完整内容矩阵，独立设计创意营销素材并在抖音、小红书、微博等主流社交平台实施系统化种草传播，成功达成日均内容曝光量提升35%、功能点击转化率提升22%的关键业绩目标</li>
+                            <li>策划并落地3场创意玩法类裂变活动，创新设计"AI特效挑战赛""智能成片社交分享"等互动机制，联动外部合作渠道（KOL/KOC资源、应用商店推荐位）拓宽获客路径，实现新增用户数环比增长40%的显著成果</li>
+                            <li>建立完善的用户行为数据分析体系，通过埋点数据精准追踪AI功能使用路径，深入识别高价值用户特征与流失风险点，制定并实施精细化分层运营策略（包含新用户引导流程优化、老用户召回机制设计、付费转化路径构建）</li>
+                            <li>高效跨部门协作产品团队，基于用户反馈与数据洞察提出12项AI功能交互优化建议，推动完成5项核心体验升级，使AI功能平均使用时长提升18%、用户满意度达4.8/5分的优秀评价</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section id="club" class="content__section">
+                    <div class="section__header">
+                        <h2 class="section__title">社团经历</h2>
+                    </div>
+                    <div class="card">
+                        <div class="card__header">
+                            <h3 class="card__title">校学生会</h3>
+                            <span class="card__date">2023.9 - 至今</span>
+                        </div>
+                        <p class="card__subtitle">部委</p>
+                        <p class="card__content" style="font-weight: 600; margin-bottom: 8px; margin-top: 5px;">一、人事就业方面：</p>
+                        <ul class="card__list">
+                            <li>负责审核、接待春秋招来校宣讲企业</li>
+                        </ul>
+                        <p class="card__content" style="font-weight: 600; margin-bottom: 8px; margin-top: 12px;">二、活动策划方面：</p>
+                        <ul class="card__list">
+                            <li>担任元旦晚会主持人，制定晚会流程；参与组织双选会</li>
+                            <li>参与策划学生会全体大会、学生会翎雁计划骨干培训等</li>
+                        </ul>
+                    </div>
+                    <div class="card" style="margin-top: 20px;">
+                        <div class="card__header">
+                            <h3 class="card__title">班级</h3>
+                            <span class="card__date">2023.9 - 2024.9</span>
+                        </div>
+                        <p class="card__subtitle">团支书</p>
+                        <ul class="card__list">
+                            <li>组织策划班级团日活动，如筹备院环湖比赛等，积累丰富的组织策划活动经验</li>
+                            <li>参与策划翎雁计划</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section id="competition" class="content__section">
+                    <div class="section__header">
+                        <h2 class="section__title">竞赛经历</h2>
+                    </div>
+                    <div class="card">
+                        <div class="card__header">
+                            <h3 class="card__title">江西省案例分析大赛</h3>
+                            <span class="card__date">2025.10 - 2025.10</span>
+                        </div>
+                        <p class="card__content">任组长，获得校决赛二等奖</p>
+                    </div>
+                    <div class="card" style="margin-top: 20px;">
+                        <div class="card__header">
+                            <h3 class="card__title">2024全国大学生创新创业大赛</h3>
+                            <span class="card__date">2024.5 - 2024.6</span>
+                        </div>
+                        <p class="card__content">任组长，组织班级同学3人，获得校决赛团体三等奖</p>
+                    </div>
+                </section>
+
+                <section id="skills" class="content__section">
+                    <div class="section__header">
+                        <h2 class="section__title">专业技能</h2>
+                    </div>
+                    <div class="card">
+                        <p class="card__content" style="font-weight: 600; margin-bottom: 12px; margin-top: 5px;">一、核心专业技能（熟练掌握）</p>
+                        <ul class="card__list">
+                            <li><strong>创意设计类：</strong>精通剪映、醒图等专业剪辑修图软件，能够独立完成视频剪辑、图像精修、视觉效果优化等创意设计工作</li>
+                            <li><strong>办公效率类：</strong>熟练操作Office全套办公软件，尤其精通Excel高级功能（包括函数应用、数据透视表、图表可视化等），能高效处理各类办公文档与数据管理任务</li>
+                            <li><strong>工程设计类：</strong>熟练掌握CAD计算机辅助设计软件，具备专业的工程图纸绘制与设计能力</li>
+                            <li><strong>智能技术应用类：</strong>精通各类AI工具在项目全生命周期中的应用，能够熟练运用AI工具辅助需求分析、原型设计、代码开发与技术问题排查，显著提升项目交付效率与质量</li>
+                        </ul>
+                        <p class="card__content" style="font-weight: 600; margin-bottom: 12px; margin-top: 20px;">二、辅助专业技能（基本掌握）</p>
+                        <ul class="card__list">
+                            <li><strong>三维建模类：</strong>掌握3DMAX三维建模基础操作，能够完成基础模型构建</li>
+                            <li><strong>数据分析类：</strong>熟悉SPSS、LINGO、MINITAB等专业数据分析软件的基本操作</li>
+                            <li><strong>数据处理类：</strong>具备基本SQL数据库查询能力，能够独立编写SQL语句从数据库中提取、筛选、整合用户行为数据与业务数据，有效辅助数据分析工作与业务报表制作</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section id="evaluation" class="content__section">
+                    <div class="section__header">
+                        <h2 class="section__title">自我评价</h2>
+                    </div>
+                    <div class="card">
+                        <ul class="card__list">
+                            <li>长期坚持系统健身训练，展现出高度的自我管理与职业自律精神，具备出色的运动协调能力与实际动手操作能力，能够高效完成各类实践性任务。</li>
+                            <li>性格兼具开朗与稳重特质，保持积极进取的工作态度，拥有优秀的团队协作意识与快速集体融入能力，做事风格耐心细致，对承担的各项工作任务具有强烈的责任担当。</li>
+                            <li>具备突出的自主学习能力与快速应变能力，拥有清晰的语言表达与高效的沟通协调技巧，对新知识、新领域始终保持浓厚兴趣与较强的钻研探索精神，能够持续拓展专业认知边界。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section id="hobbies" class="content__section">
+                    <div class="section__header">
+                        <h2 class="section__title">兴趣爱好</h2>
+                    </div>
+                    <div class="card">
+                        <p class="card__content" style="font-weight: 500; margin-bottom: 15px;">工作之外的精彩生活</p>
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                            <div style="padding: 10px 12px; background: rgba(102, 126, 234, 0.1); border-radius: 10px;">
+                                <p style="font-weight: 600; margin-bottom: 5px;">阅读</p>
+                                <p style="font-size: 0.9em; color: var(--text-secondary);">诗词、散文、科幻、哲学</p>
+                            </div>
+                            <div style="padding: 10px 12px; background: rgba(102, 126, 234, 0.1); border-radius: 10px;">
+                                <p style="font-weight: 600; margin-bottom: 5px;">游戏</p>
+                                <p style="font-size: 0.9em; color: var(--text-secondary);">角色扮演、策略类、MOBA、FPS</p>
+                            </div>
+                            <div style="padding: 10px 12px; background: rgba(102, 126, 234, 0.1); border-radius: 10px;">
+                                <p style="font-weight: 600; margin-bottom: 5px;">创作</p>
+                                <p style="font-size: 0.9em; color: var(--text-secondary);">AI绘画、设计、短视频、建模</p>
+                            </div>
+                            <div style="padding: 10px 12px; background: rgba(102, 126, 234, 0.1); border-radius: 10px;">
+                                <p style="font-weight: 600; margin-bottom: 5px;">运动</p>
+                                <p style="font-size: 0.9em; color: var(--text-secondary);">健身、足球、旅行、登山</p>
+                            </div>
+                            <div style="padding: 10px 12px; background: rgba(102, 126, 234, 0.1); border-radius: 10px;">
+                                <p style="font-weight: 600; margin-bottom: 5px;">艺术</p>
+                                <p style="font-size: 0.9em; color: var(--text-secondary);">BBox、吉他、唱歌、Rap</p>
+                            </div>
+                            <div style="padding: 10px 12px; background: rgba(102, 126, 234, 0.1); border-radius: 10px;">
+                                <p style="font-weight: 600; margin-bottom: 5px;">AI探索</p>
+                                <p style="font-size: 0.9em; color: var(--text-secondary);">AI Coding、AI绘画、AI视频、Prompt工程</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="projects" class="content__section">
+                    <div class="section__header">
+                        <h2 class="section__title">项目经历</h2>
+                    </div>
+                    <div class="card">
+                        <div class="card__header">
+                            <h3 class="card__title">微信小程序「如厕计时小工具」</h3>
+                            <span class="card__date">2026.4</span>
+                        </div>
+                        <p class="card__subtitle">技术栈：微信小程序、JavaScript、WXML、WXSS</p>
+                        <p class="card__content">
+                            独立完成从产品设计、UI设计、代码开发到后期测试及问题修复的完整开发流程。
+                        </p>
+                        <p class="card__content" style="margin-top: 10px;">
+                            <strong>个人贡献：</strong>
+                        </p>
+                        <ul class="card__list" style="margin-top: 5px; padding-left: 20px;">
+                            <li>产品设计：完成需求分析和功能规划，设计简洁易用的计时界面</li>
+                            <li>UI设计：设计清新简约的视觉风格，优化用户体验</li>
+                            <li>代码开发：独立完成小程序前端开发，实现计时、记录、统计等核心功能</li>
+                            <li>测试修复：进行多轮测试，修复bug并优化性能</li>
+                        </ul>
+                    </div>
+                    <div class="card" style="margin-top: 1.5rem;">
+                        <div class="card__header">
+                            <h3 class="card__title">腾讯青科实训营「世界环境日之垃圾的自白」播客项目</h3>
+                            <span class="card__date">2026.5</span>
+                        </div>
+                        <p class="card__subtitle">技术栈：AI文本转语音(TTS)、音频剪辑软件、网页设计</p>
+                        <p class="card__content">
+                            作为独立参与者完成从概念构思到最终发布的全流程制作。
+                        </p>
+                        <p class="card__content" style="margin-top: 10px;">
+                            <strong>个人贡献：</strong>
+                        </p>
+                        <ul class="card__list" style="margin-top: 5px; padding-left: 20px;">
+                            <li>剧本创作：独立编写环保主题播客剧本，内容聚焦垃圾污染现状与环保解决方案</li>
+                            <li>AI配音：使用AI文本转语音(TTS)技术完成播客配音，确保语音自然流畅符合主题情感基调</li>
+                            <li>音频后期：运用专业音频剪辑软件进行后期处理，优化音频质量并添加适当音效</li>
+                            <li>宣传发布：设计制作项目宣传页面，整合播客内容与视觉元素，完成最终发布工作</li>
+                        </ul>
+                    </div>
+                    <div class="card" style="margin-top: 1.5rem;">
+                        <div class="card__header">
+                            <h3 class="card__title">个人简历展示平台（全栈开发）</h3>
+                            <span class="card__date">2026.5 - 至今</span>
+                        </div>
+                        <p class="card__subtitle">技术栈：Node.js、Express.js、HTML5、CSS3、JavaScript ES6+、Three.js、JSON数据持久化</p>
+                        <p class="card__content">
+                            独立设计并开发的全栈个人简历展示平台，采用前后端分离架构，融合现代化UI设计与3D交互效果。平台集个人信息展示、动态内容管理、AI智能交互于一体。
+                        </p>
+                        <p class="card__content" style="margin-top: 10px;">
+                            <strong>核心功能：</strong>
+                        </p>
+                        <ul class="card__list" style="margin-top: 5px; padding-left: 20px;">
+                            <li>首页展示系统：全屏沉浸式设计，Three.js实现3D模型渲染，支持明暗主题切换</li>
+                            <li>个人空间管理：教育背景、实习经历等8大板块的卡片式展示</li>
+                            <li>生活瞬间社交系统：图文发布、点赞互动、管理员权限控制、数据实时同步</li>
+                            <li>AI智能助手：集成对话交互功能，提供智能问答服务</li>
+                        </ul>
+                        <p class="card__content" style="margin-top: 10px;">
+                            <strong>🎯 架构设计：</strong>
+                        </p>
+                        <ul class="card__list" style="margin-top: 5px; padding-left: 20px;">
+                            <li>设计前后端分离架构，制定RESTful API接口规范，确保系统扩展性和可维护性</li>
+                            <li>规划数据存储方案，采用JSON文件实现轻量级数据持久化，优化读写性能</li>
+                        </ul>
+                        <p class="card__content" style="margin-top: 10px;">
+                            <strong>🎨 前端开发：</strong>
+                        </p>
+                        <ul class="card__list" style="margin-top: 5px; padding-left: 20px;">
+                            <li>独立完成UI设计与开发，采用现代CSS布局技术（Flexbox/Grid）实现响应式界面</li>
+                            <li>运用Three.js实现3D模型加载与动画效果，提升视觉体验</li>
+                            <li>开发主题切换、音乐播放、平滑滚动等交互功能，增强用户体验</li>
+                        </ul>
+                        <p class="card__content" style="margin-top: 10px;">
+                            <strong>⚙️ 后端开发：</strong>
+                        </p>
+                        <ul class="card__list" style="margin-top: 5px; padding-left: 20px;">
+                            <li>使用Express.js搭建轻量级服务器，实现生活瞬间的CRUD操作</li>
+                            <li>设计管理员权限验证机制，确保内容发布安全性</li>
+                            <li>开发数据同步接口，支持多端数据实时更新</li>
+                        </ul>
+                        <p class="card__content" style="margin-top: 10px;">
+                            <strong>🚀 部署运维：</strong>
+                        </p>
+                        <ul class="card__list" style="margin-top: 5px; padding-left: 20px;">
+                            <li>完成服务器环境配置（Linux/Ubuntu），实现项目自动化部署</li>
+                            <li>配置PM2进程管理，确保服务稳定运行，支持7x24小时在线</li>
+                        </ul>
+                        <p class="card__content" style="margin-top: 10px; font-size: 0.85rem; opacity: 0.8;">
+                            项目成果：公网可访问（http://116.62.48.72:3000），支持7x24小时稳定运行
+                        </p>
+                    </div>
+                </section>
+
+                <!-- AI聊天对话框 -->
+                <div class="chat-dialog-overlay" id="chatDialogOverlay" onclick="closeChatDialog()">
+                    <div class="chat-dialog" onclick="event.stopPropagation()">
+                        <div class="chat-dialog-header">
+                            <h3>AI智能助手</h3>
+                            <button class="chat-dialog-close" onclick="closeChatDialog()">✕</button>
+                        </div>
+                        <div class="chat-dialog-content" id="chatDialogContent">
+                            <div class="chat-message ai-message">
+                                <span class="message-text">你好！我是你的AI智能助手，有什么我可以帮助你的吗？</span>
+                            </div>
+                        </div>
+                        <div class="chat-dialog-input">
+                            <input type="text" id="aiDialogInput" class="ai-input" placeholder="输入你的问题..." onkeyup="if(event.keyCode===13) sendDialogMessage()">
+                            <button id="aiDialogSendBtn" class="ai-send-btn" onclick="sendDialogMessage()">发送</button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <!-- 音乐播放器 -->
+    <div class="music-player" id="musicPlayer">
+        <div class="player-toggle" id="playerToggle" onclick="togglePlayer()">
+            <div class="record-player">
+                <div class="vinyl" id="vinyl">
+                    <div class="vinyl-center"></div>
+                </div>
+                <div class="needle"></div>
+            </div>
+        </div>
+        <div class="player-content" id="playerContent">
+            <div class="player-header">
+                <div class="song-info">
+                    <div class="song-name-container">
+                        <span class="song-name" id="songName">未播放歌曲</span>
+                    </div>
+                    <div class="song-artist" id="songArtist">-</div>
+                </div>
+            </div>
+            <div class="player-controls">
+                <button class="control-btn" id="prevBtn" onclick="prevSong()">
+                    <span class="btn-icon">⏮</span>
+                </button>
+                <button class="control-btn main-btn" id="playBtn" onclick="togglePlay()">
+                    <span class="btn-icon" id="playIcon">▶</span>
+                </button>
+                <button class="control-btn" id="nextBtn" onclick="nextSong()">
+                    <span class="btn-icon">⏭</span>
+                </button>
+            </div>
+            <div class="player-progress">
+                <div class="progress-bar" id="progressBar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-time">
+                    <span class="time-current" id="currentTime">0:00</span>
+                    <span class="time-divider">/</span>
+                    <span class="time-total" id="totalTime">0:00</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <audio id="bg-music">
+        <source src="music/background.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- 联系方式模态窗口 -->
+    <div class="modal-overlay" id="contactModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeModal">×</button>
+            <h3 class="modal-title">联系我</h3>
+            <div class="contact-items">
+                <div class="contact-item">
+                    <span class="contact-icon">💬</span>
+                    <div class="contact-info">
+                        <span class="contact-label">微信账号</span>
+                        <span class="contact-value">WJH17870819695</span>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <span class="contact-icon">📱</span>
+                    <div class="contact-info">
+                        <span class="contact-label">联系电话</span>
+                        <span class="contact-value">17679089668</span>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <span class="contact-icon">📧</span>
+                    <div class="contact-info">
+                        <span class="contact-label">电子邮箱</span>
+                        <span class="contact-value">3180793841@qq.com</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 个人空间模态页面 -->
+    <div class="personal-space-overlay" id="personalSpaceModal">
+        <div class="personal-space-container">
+            <!-- 头部信息区 -->
+            <div class="personal-space-header" id="personalSpaceHeader">
+                <button class="personal-space-close" onclick="closePersonalSpace()">×</button>
+                <!-- 背景图片区域 -->
+                <div class="personal-header-bg-container" id="headerBgContainer">
+                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=800&fit=crop" alt="背景图" class="personal-header-bg" id="headerBg" />
+                    <div class="personal-header-overlay"></div>
+                </div>
+                <div class="personal-info-section">
+                    <div class="personal-info-left">
+                        <div class="personal-avatar-large">
+                            <img src="images/avatar.jpg" alt="头像" />
+                        </div>
+                    </div>
+                    <div class="personal-info-center">
+                        <h2 class="personal-nickname">武靖皓</h2>
+                        <p class="personal-signature">用代码改变世界，用技术创造未来 ✨</p>
+                    </div>
+                    <div class="personal-info-right">
+                        <div class="personal-stats">
+                            <div class="stat-item">
+                                <span class="stat-number" id="momentsCount">0</span>
+                                <span class="stat-label">瞬间</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number" id="likesCount">0</span>
+                                <span class="stat-label">获赞</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 内容切换标签 -->
+            <div class="personal-tabs">
+                <button class="tab-btn active" id="momentsTab" onclick="switchTab('moments')">生活瞬间</button>
+                <button class="tab-btn" id="lifeTab" onclick="switchTab('life')">成长轨迹</button>
+                <button class="tab-btn" id="guestbookTab" onclick="switchTab('guestbook')">访客留言</button>
+            </div>
+
+            <!-- 生活瞬间内容区 -->
+            <div class="personal-content active" id="momentsContent">
+                <div class="moments-grid" id="momentsGrid">
+                    <!-- 动态加载内容 -->
+                </div>
+                <div class="loading-indicator" id="loadingIndicator">
+                    <div class="spinner"></div>
+                    <span>加载中...</span>
+                </div>
+                <div class="load-more-trigger" id="loadMoreTrigger"></div>
+                <div class="moments-footer">
+                    <button class="moments-publish-btn" onclick="verifyAdminAndPublish()">
+                        <span>+</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 人生经历内容区 -->
+            <div class="personal-content" id="lifeContent">
+                <div class="life-timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h4>2026年5月</h4>
+                            <p>完成个人简历展示平台的开发，实现全栈技术栈的独立开发能力</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h4>2026年5月</h4>
+                            <p>参与腾讯青科实训营，完成环保主题播客项目的独立制作</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h4>2026年4月</h4>
+                            <p>独立开发微信小程序「如厕计时小工具」，完成从设计到发布的全流程</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h4>2023年9月</h4>
+                            <p>进入南昌大学工业工程专业学习，开始系统学习编程和工程知识</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 访客留言内容区 -->
+            <div class="personal-content" id="guestbookContentArea">
+                <div class="guestbook-section">
+                    <!-- 留言表单 -->
+                    <div class="guestbook-form">
+                        <div class="form-row">
+                            <input type="text" id="guestbookName" class="form-input" placeholder="您的昵称" maxlength="50">
+                            <input type="email" id="guestbookEmail" class="form-input" placeholder="电子邮箱（选填）" maxlength="100">
+                            <button class="guestbook-submit-btn" onclick="submitGuestbook()">发表留言</button>
+                        </div>
+                        <textarea id="guestbookMessageContent" class="form-textarea" placeholder="留下您想说的话..." maxlength="500"></textarea>
+                    </div>
+                    
+                    <!-- 留言列表 -->
+                    <div class="guestbook-list" id="guestbookList">
+                        <!-- 动态加载留言 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 生活瞬间详情模态框 -->
+    <div class="moment-detail-modal" id="momentDetailModal">
+        <div class="moment-detail-content">
+            <button class="moment-detail-close" onclick="closeMomentDetail()">×</button>
+            <div class="moment-detail-body" id="momentDetailBody">
+                <!-- 动态内容 -->
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 发布生活瞬间模态框 -->
+    <div class="publish-modal" id="publishModal">
+        <div class="publish-modal-content">
+            <div class="publish-modal-header">
+                <h3>发布瞬间</h3>
+                <button class="publish-modal-close" onclick="closePublishModal()">×</button>
+            </div>
+            <div class="publish-modal-body">
+                <div class="publish-form-group">
+                    <label for="publishText">文字内容</label>
+                    <textarea id="publishText" placeholder="说点什么..." rows="4"></textarea>
+                </div>
+                <div class="publish-form-group">
+                    <label for="publishImage">图片</label>
+                    <div class="publish-image-upload" id="publishImageUpload">
+                        <input type="file" id="publishImageInput" accept="image/*" style="display: none;" onchange="handleImageSelect(event)" />
+                        <div class="publish-upload-placeholder" onclick="document.getElementById('publishImageInput').click()">
+                            <span>点击上传图片</span>
+                            <small>支持 JPG、PNG 格式</small>
+                        </div>
+                        <img id="publishImagePreview" style="display: none;" />
+                        <button type="button" class="publish-image-delete" onclick="event.stopPropagation(); deleteSelectedImage();" style="display: none;">×</button>
+                    </div>
+                </div>
+            </div>
+            <div class="publish-modal-footer">
+                <button class="publish-cancel-btn" onclick="closePublishModal()">取消</button>
+                <button class="publish-submit-btn" onclick="submitMoment()">发布</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
