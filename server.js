@@ -11,8 +11,18 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // 安全的 CORS 配置
+const allowedOrigins = process.env.ALLOWED_ORIGINS ? 
+    process.env.ALLOWED_ORIGINS.split(',') : 
+    ['http://localhost:3000', 'https://localhost:3443'];
+
 app.use(cors({
-    origin: true, // 允许任何来源，但仅在开发环境使用
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type']
@@ -121,9 +131,12 @@ app.delete('/api/moments/:id', (req, res) => {
 });
 
 app.post('/api/doubao', async (req, res) => {
-    console.log('收到请求:', req.body);
     try {
         const { messages, temperature = 0.7 } = req.body;
+        
+        if (!messages || !Array.isArray(messages)) {
+            return res.status(400).json({ error: '参数错误', message: 'messages必须是数组' });
+        }
         
         const postData = JSON.stringify({
             model: process.env.ENDPOINT_ID,
@@ -142,39 +155,30 @@ app.post('/api/doubao', async (req, res) => {
             }
         };
         
-        console.log('请求豆包API:', {
-            hostname: options.hostname,
-            path: options.path,
-            model: process.env.ENDPOINT_ID
-        });
-        
         const request = https.request(options, (apiRes) => {
             let data = '';
-            
-            console.log('豆包API响应状态码:', apiRes.statusCode);
             
             apiRes.on('data', (chunk) => {
                 data += chunk;
             });
             
             apiRes.on('end', () => {
-                console.log('豆包API完整响应:', data);
                 try {
                     if (apiRes.statusCode !== 200) {
-                        res.status(apiRes.statusCode).json({ error: 'API请求失败', details: data });
+                        res.status(apiRes.statusCode).json({ error: 'API请求失败' });
                         return;
                     }
                     const response = JSON.parse(data);
                     res.json(response);
                 } catch (error) {
                     console.error('解析响应失败:', error);
-                    res.status(500).json({ error: '解析响应失败', details: data });
+                    res.status(500).json({ error: '解析响应失败' });
                 }
             });
         });
         
         request.on('error', (error) => {
-            console.error('请求豆包API失败:', error);
+            console.error('请求豆包API失败:', error.message);
             res.status(500).json({ error: '请求豆包API失败', details: error.message });
         });
         
@@ -182,8 +186,8 @@ app.post('/api/doubao', async (req, res) => {
         request.end();
         
     } catch (error) {
-        console.error('服务器错误:', error);
-        res.status(500).json({ error: '服务器内部错误', details: error.message });
+        console.error('服务器错误:', error.message);
+        res.status(500).json({ error: '服务器内部错误' });
     }
 });
 
@@ -251,10 +255,11 @@ app.put('/api/messages/:id/like', (req, res) => {
 
 app.post('/api/admin/verify', (req, res) => {
     const { password } = req.body;
-    if (password === 'admin123') {
+    const adminPassword = process.env.ADMIN_PASSWORD || 'default_admin_password_change_this';
+    if (password === adminPassword) {
         res.json({ success: true });
     } else {
-        res.json({ success: false });
+        res.status(401).json({ success: false, message: '密码错误' });
     }
 });
 
@@ -288,8 +293,23 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+const httpsOptions = {
+    key: fs.existsSync(path.join(__dirname, 'server.key')) ? fs.readFileSync(path.join(__dirname, 'server.key')) : null,
+    cert: fs.existsSync(path.join(__dirname, 'server.crt')) ? fs.readFileSync(path.join(__dirname, 'server.crt')) : null
+};
+
+const HTTPS_PORT = process.env.HTTPS_PORT || 3443;
+
+if (httpsOptions.key && httpsOptions.cert) {
+    https.createServer(httpsOptions, app).listen(HTTPS_PORT, () => {
+        console.log(`HTTPS服务器运行在 https://localhost:${HTTPS_PORT}`);
+        console.log(`健康检查: https://localhost:${HTTPS_PORT}/health`);
+        console.log(`API端点: https://localhost:${HTTPS_PORT}/api/doubao`);
+    });
+}
+
 app.listen(PORT, () => {
-    console.log(`服务器运行在 http://localhost:${PORT}`);
+    console.log(`HTTP服务器运行在 http://localhost:${PORT}`);
     console.log(`健康检查: http://localhost:${PORT}/health`);
     console.log(`API端点: http://localhost:${PORT}/api/doubao`);
 });
