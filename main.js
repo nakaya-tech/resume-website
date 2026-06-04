@@ -1226,18 +1226,18 @@ function renderGuestbook(messages) {
     }
     
     list.innerHTML = messages.map((msg, index) => `
-        <div class="guestbook-item" style="animation-delay: ${index * 0.1}s;">
+        <div class="guestbook-item" style="animation-delay: ${index * 0.1}s;" ondblclick="showDeleteBtn(${msg.id})">
             <div class="guestbook-item-header">
                 <span class="guestbook-name">${escapeHtml(msg.name)}</span>
-                <span class="guestbook-time">${msg.time}</span>
+                <div class="guestbook-right">
+                    <span class="guestbook-time">${msg.time}</span>
+                    <button class="guestbook-delete-btn" onclick="deleteMessage(${msg.id})">
+                        <span>🗑️</span>
+                        <span>删除</span>
+                    </button>
+                </div>
             </div>
             <p class="guestbook-content">${escapeHtml(msg.content)}</p>
-            <div class="guestbook-item-footer">
-                <button class="guestbook-delete-btn" onclick="deleteMessage(${msg.id})">
-                    <span>🗑️</span>
-                    <span>删除</span>
-                </button>
-            </div>
         </div>
     `).join('');
 }
@@ -1291,6 +1291,18 @@ async function likeMessage(id, button) {
 }
 
 // 验证密码后删除留言
+window.showDeleteBtn = function(id) {
+    const items = document.querySelectorAll('.guestbook-item');
+    items.forEach(item => {
+        item.classList.remove('show-delete');
+    });
+    
+    const item = document.querySelector(`.guestbook-item[onclick*="${id}"], .guestbook-item[ondblclick*="${id}"]`);
+    if (item) {
+        item.classList.add('show-delete');
+    }
+};
+
 window.deleteMessage = async function(id) {
     const password = prompt('请输入管理员密码：');
     

@@ -41,6 +41,14 @@ desktop.ini
 *.key
 *.crt
 
+# 数据库文件
+*.db
+data.db
+
+# 旧的JSON数据文件（迁移到数据库后不再使用）
+moments.json
+messages.json
+
 # 临时文件
 temp/
 tmp/
